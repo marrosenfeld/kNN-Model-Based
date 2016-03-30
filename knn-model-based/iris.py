@@ -17,10 +17,11 @@ def main():
     classes, y = np.unique(y, return_inverse=True)
 
     #train with all data
-    representatives = train(X,y)
+    representatives = train(X,y,0)
     predicted_labels = classifyAll(X,representatives)
     print("5 fold cross validation avg accuracy: {}".format(kfoldCrossValidation(X,y, 5)))
 
+#     graph number of representatives for different values of erd
 
 if __name__ == "__main__":
     main()

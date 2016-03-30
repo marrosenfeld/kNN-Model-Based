@@ -14,7 +14,7 @@ def getUngrouped(s):
     ind =  [ k for k in range(len(s)) if s[k] == 0 ]
     return ind
 
-def train(X,y):
+def train(X,y, erd):
     m = X.shape[0]
     states = np.zeros(m)
     distMatrix = getDistanceMatrix(X)
@@ -36,9 +36,13 @@ def train(X,y):
             #compute neigbourhood
             q = 0
             neighbourhood = list()
-            while (q < len(sorted_distances)and y[sorted_distances[q][0]] == y[i]):
+            errors = 0
+            while (q < len(sorted_distances)and (y[sorted_distances[q][0]] == y[i] or errors < erd)):
                 neighbourhood.append(sorted_distances[q][0])
+                if(y[sorted_distances[q][0]] != y[i]):
+                    errors += 1
                 q+=1
+
             if (len(neighbourhood) > len(maxNeighbourhood)):
                 maxNeighbourhood = neighbourhood
                 tupleMaxNeighbourhood = i
@@ -81,7 +85,7 @@ def kfoldCrossValidation(X,labels, k):
         labels_train = labels[train_index]
         X_test = X[test_index]
         labels_test = labels[test_index]
-        representatives = train(X_train, labels_train)
+        representatives = train(X_train, labels_train, 1)
         predictedLabels = classifyAll(X_test,representatives)
         accuracy = metrics.accuracy_score(labels_test, predictedLabels)
         all_metrics.append([accuracy])
