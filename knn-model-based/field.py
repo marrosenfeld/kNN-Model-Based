@@ -10,9 +10,12 @@ def main():
     y = data[1]
 
 
+    classes, y = np.unique(y, return_inverse=True)
+
     #train with all data
     representatives = train(X,y)
-    print(representatives)
+    predicted_labels = classifyAll(X,representatives)
+    print("5 fold cross validation avg accuracy: {}".format(kfoldCrossValidation(X,y, 5)))
 
 if __name__ == "__main__":
     main()
